@@ -1,0 +1,113 @@
+[gd_scene load_steps=15 format=3 uid="uid://dd66hq583lfrr"]
+
+[ext_resource type="Texture2D" uid="uid://hhagnpgvb0px" path="res://art/3DS - Taiko no Tatsujin Dokodon Misuteri Adobencha - Touhou Project.png" id="1_jsyk4"]
+[ext_resource type="Script" path="res://Mob.gd" id="1_womj8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1b32"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(4, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m7xrh"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(102, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5ey7"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(200, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ltlq"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(298, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bn87d"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(396, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1fan4"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(494, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h8y2f"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(592, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofwtn"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(690, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0y5iw"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(788, 624, 98, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tj2cb"]
+atlas = ExtResource("1_jsyk4")
+region = Rect2(880, 320, 80, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mvofg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1b32")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m7xrh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5ey7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ltlq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bn87d")
+}],
+"loop": true,
+"name": &"dance",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fan4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h8y2f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ofwtn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0y5iw")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tj2cb")
+}],
+"loop": true,
+"name": &"short_jump",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lxiax"]
+radius = 23.0
+height = 76.0
+
+[node name="Mob" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_womj8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_mvofg")
+animation = &"dance"
+frame_progress = 0.459574
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-10, 2)
+shape = SubResource("CapsuleShape2D_lxiax")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
