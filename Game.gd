@@ -2,26 +2,37 @@ extends Node2D
 
 @export var mob_scene: PackedScene
 @onready var spawner = $MobSpawnPath/MobSpawn
+@onready var hud: HUD = $HUD
+@onready var music = $Music
 var score
 
-func _ready():
-	new_game()
-	
+func set_score(val):
+	score = val
+	hud.update_score(score)
+
 func new_game():
-	score = 0
+	set_score(0)
+	
+	music.play()
+	
 	$StartTimer.start()
 	$Player.start()
+	
+	get_tree().call_group("mobs", "queue_free") # Delete all mobs
 
 func game_over():
 	$ScoreTimer.stop()
 	$MobTimer.stop()
+	
+	music.stop()
+	$DeathSound.play()
 
 func _process(delta):
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
 
 func _on_score_timer_timeout():
-	score += 1
+	set_score(score + 1)
 
 func _on_mob_timer_timeout():
 	var mob: Mob = mob_scene.instantiate()
@@ -38,3 +49,8 @@ func _on_start_timer_timeout():
 
 func _on_player_hit():
 	game_over()
+	hud.show_game_over()
+
+func _on_hud_start_game():
+	new_game()
+	hud.show_message("Dodge the\n Youkai!")

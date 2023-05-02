@@ -1,22 +1,47 @@
-[gd_scene load_steps=7 format=3 uid="uid://bqqtlu1l4ibwu"]
+[gd_scene load_steps=13 format=3 uid="uid://ctf6qy7hhcnaw"]
 
-[ext_resource type="PackedScene" uid="uid://cih6mlfli8wmt" path="res://Player.tscn" id="1_cvgsn"]
 [ext_resource type="Script" path="res://Game.gd" id="1_cvy2k"]
 [ext_resource type="PackedScene" uid="uid://dd66hq583lfrr" path="res://Mob.tscn" id="1_dqdtc"]
-[ext_resource type="Texture2D" uid="uid://c63hq4nrml40m" path="res://icon.svg" id="2_bejqm"]
+[ext_resource type="PackedScene" uid="uid://cih6mlfli8wmt" path="res://Player.tscn" id="3_vrk14"]
 [ext_resource type="Script" path="res://MobSpawnPath.gd" id="4_s8esi"]
+[ext_resource type="Texture2D" uid="uid://gb5bnxwjmsld" path="res://art/PC Computer - Touhou Mystias Izakaya - Yukari Yakumo.png" id="5_5ji4n"]
+[ext_resource type="PackedScene" uid="uid://c8i00bmfotedv" path="res://Hud.tscn" id="6_oau1k"]
+[ext_resource type="AudioStream" uid="uid://sv2jpmqwqakp" path="res://art/House-Set-of-Embodiment-of-the-Scarlet-Devil-12-Seppette-for-a-Dead-Princess.mp3" id="7_2c3sm"]
+[ext_resource type="AudioStream" uid="uid://m2gnk5qj30p4" path="res://art/touhou-death-sound-effect-By-tuna.voicemod.net.mp3" id="8_jgbb7"]
 
 [sub_resource type="Curve2D" id="Curve2D_r7e68"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 0, 0, -2, 3, 0, 0, 0, 0, 477, 1, 0, 0, 0, 0, -2, 3)
 }
 point_count = 3
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g0bnb"]
+atlas = ExtResource("5_5ji4n")
+region = Rect2(237, 10, 227, 110)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsi74"]
+atlas = ExtResource("5_5ji4n")
+region = Rect2(461, 10, 221, 111)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q4fo1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g0bnb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsi74")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_cvy2k")
 mob_scene = ExtResource("1_dqdtc")
 
-[node name="Player" parent="." instance=ExtResource("1_cvgsn")]
+[node name="Player" parent="." instance=ExtResource("3_vrk14")]
 position = Vector2(244, 248)
 
 [node name="ScoreTimer" type="Timer" parent="."]
@@ -31,11 +56,24 @@ curve = SubResource("Curve2D_r7e68")
 script = ExtResource("4_s8esi")
 
 [node name="MobSpawn" type="PathFollow2D" parent="MobSpawnPath"]
+position = Vector2(-2, 3)
+rotation = -0.00417534
 
-[node name="Sprite2D" type="Sprite2D" parent="MobSpawnPath/MobSpawn"]
-texture = ExtResource("2_bejqm")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MobSpawnPath/MobSpawn"]
+sprite_frames = SubResource("SpriteFrames_q4fo1")
+frame_progress = 0.914478
+offset = Vector2(0, 50)
+
+[node name="HUD" parent="." instance=ExtResource("6_oau1k")]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_2c3sm")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_jgbb7")
 
 [connection signal="hit" from="Player" to="." method="_on_player_hit"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="_on_hud_start_game"]
